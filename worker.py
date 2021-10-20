@@ -1,4 +1,6 @@
+import random
 import uuid
+from time import sleep
 
 from flask import Flask
 
@@ -10,7 +12,11 @@ app = Flask(name)
 @app.route('/<cnt>')
 def index(cnt: str):
     print(f"received request: {cnt}")
-    return f"Hello, World! {cnt}"
+    n = random.randint(2, 10)
+    for i in range(n):
+        print(f"working {i} of {n}")
+        sleep(0.5)
+    return f"This is the result for {cnt}"
 
 
 if __name__ == '__main__':
