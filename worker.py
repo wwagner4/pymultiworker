@@ -12,7 +12,7 @@ app = Flask(name)
 @app.route('/<cnt>')
 def index(cnt: str):
     print(f"received request: {cnt}")
-    n = random.randint(2, 10)
+    n = random.randint(2, 5)
     for i in range(n):
         print(f"working {i} of {n}")
         sleep(0.5)
