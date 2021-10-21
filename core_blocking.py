@@ -14,7 +14,7 @@ def do_work(cnt):
     print(f"result for {rs}: {r.reason} {r.json()}")
 
 
-def main():
+def run_work_block():
     n = 10
     start = time.time()
     do_works(n)
@@ -26,6 +26,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
-
-
+    while True:
+        run_work_block()
+        print("-- Finished work block ------------------------------------------")
+        time.sleep(10)
