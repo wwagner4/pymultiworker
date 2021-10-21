@@ -1,5 +1,7 @@
+import logging
 import os
 import random
+import sys
 import uuid
 from time import sleep
 
@@ -11,17 +13,17 @@ app = Flask(name)
 
 e_host = os.getenv("HOST", "0.0.0.0")
 e_port = int(os.getenv("PORT", "5000"))
+e_loglevel = os.getenv("LOGLEVEL", "INFO")
 
 
 @app.route('/<cnt>')
 def index(cnt: str):
     n = random.randint(1, 7)
-    # delay a random duration to avoid 'print' overlapping
     sleep(random.random() * 0.1)
-    print(f"received: /{cnt} n:{n}")
+    logging.info(f"{wid} -- received: /{cnt} n:{n}")
     for i in range(1, n + 1):
         sleep(0.5)
-        print(f"working /{cnt} - {i} / {n}")
+        logging.info(f"{wid} -- working /{cnt} - {i} / {n}")
     return {
         "cnt": cnt,
         "worker": app.name
@@ -29,5 +31,6 @@ def index(cnt: str):
 
 
 if __name__ == '__main__':
-    print(f"started worker. name: {name} id: {wid}")
+    logging.basicConfig(stream=sys.stdout, level=e_loglevel)
+    logging.info(f"{wid} -- started worker. name: {name}")
     app.run(debug=False, host=e_host, port=e_port)
