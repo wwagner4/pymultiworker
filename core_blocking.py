@@ -1,14 +1,19 @@
+import os
 import time
 
 import requests
+
+e_host = os.getenv("HOST", "172.17.0.2")
+e_port = int(os.getenv("PORT", "5000"))
 
 
 def do_works(n: int):
     [do_work(cnt) for cnt in range(n)]
 
 
+# noinspection HttpUrlsUsage
 def do_work(cnt):
-    rs = f"http://172.17.0.2:8080/{cnt}"
+    rs = f"http://{e_host}:{e_port}/{cnt}"
     print(f"sending {rs}")
     r = requests.get(rs)
     print(f"result for {rs}: {r.reason} {r.json()}")

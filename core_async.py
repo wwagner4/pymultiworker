@@ -1,7 +1,11 @@
 import asyncio
+import os
 import time
 
 import aiohttp
+
+e_host = os.getenv("HOST", "172.17.0.2")
+e_port = int(os.getenv("PORT", "5000"))
 
 
 async def do_works(n: int):
@@ -13,8 +17,9 @@ async def do_works(n: int):
             print(f"result {i} - {r.result()}")
 
 
+# noinspection HttpUrlsUsage
 async def do_work(call_id: str, session) -> dict:
-    rs = f"http://172.17.0.2:8080/{call_id}"
+    rs = f"http://{e_host}:{e_port}/{call_id}"
     print(f"sending {rs}")
     async with session.get(rs) as resp:
         reason = resp.reason
