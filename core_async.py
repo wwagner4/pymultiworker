@@ -7,17 +7,20 @@ import aiohttp
 async def do_works(n: int):
     async with aiohttp.ClientSession() as session:
         tasks = [asyncio.create_task(do_work(cnt, session)) for cnt in range(n)]
-        await asyncio.wait(tasks)
+        rs = await asyncio.wait(tasks)
         print("finished all")
+        for i, r in enumerate(rs[0]):
+            print(f"result {i} - {r.result()}")
 
 
-async def do_work(cnt, session):
+async def do_work(cnt, session) -> dict :
     rs = f"http://172.17.0.2:8080/{cnt}"
     print(f"sending {rs}")
     async with session.get(rs) as resp:
         reason = resp.reason
         r = await resp.json()
         print(f"result for {rs}: {reason} {r}")
+        return r
 
 
 def main():
