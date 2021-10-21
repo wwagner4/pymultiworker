@@ -5,7 +5,7 @@ import time
 
 import requests
 
-e_host = os.getenv("HOST", "172.17.0.2")
+e_host = os.getenv("HOST", "localhost")
 e_port = int(os.getenv("PORT", "5000"))
 e_loglevel = os.getenv("LOGLEVEL", "INFO")
 
@@ -33,9 +33,25 @@ def run_work_block():
     logging.info(f"took {dur1:.2f} seconds for 1 call")
 
 
-if __name__ == '__main__':
-    logging.basicConfig(stream=sys.stdout, level=e_loglevel)
+def run_work_blocks():
     while True:
         run_work_block()
         logging.info("-- Finished work block ------------------------------------------")
         time.sleep(10)
+
+
+def main(error_cnt: int):
+    try:
+        run_work_blocks()
+    except requests.exceptions.ConnectionError as e:
+        if error_cnt > 10:
+            raise e
+        else:
+            logging.info(f"Caught {type(e)}. Error count: {error_cnt}")
+            time.sleep(5)
+            main(error_cnt + 1)
+
+
+if __name__ == '__main__':
+    logging.basicConfig(stream=sys.stdout, level=e_loglevel)
+    main(0)

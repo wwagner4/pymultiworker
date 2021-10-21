@@ -1,0 +1,22 @@
+version: "3"
+services:
+  worker:
+    image: pymultiworker
+    entrypoint: ["python", "-m", "worker"]
+    networks:
+      - internal
+    deploy:
+      replicas: 3
+
+  core:
+    image: pymultiworker
+    entrypoint: ["python", "-m", "core_async"]
+    environment:
+      - HOST=worker
+      - BLOCKSIZE=15
+    networks:
+      - internal
+
+networks:
+  internal:
+    driver: overlay

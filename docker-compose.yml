@@ -1,0 +1,11 @@
+version: "3"
+services:
+  worker:
+    image: pymultiworker
+    entrypoint: ["python",  "-m",  "worker"]
+
+  core:
+    image: pymultiworker
+    entrypoint: ["python", "-m", "core_async"]
+    environment:
+      - HOST=worker

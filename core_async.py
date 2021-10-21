@@ -6,9 +6,10 @@ import time
 
 import aiohttp
 
-e_host = os.getenv("HOST", "172.17.0.2")
+e_host = os.getenv("HOST", "localhost")
 e_port = int(os.getenv("PORT", "5000"))
 e_loglevel = os.getenv("LOGLEVEL", "INFO")
+e_blocksize = int(os.getenv("BLOCKSIZE", "3"))
 
 
 async def do_works(n: int):
@@ -32,25 +33,35 @@ async def do_work(call_id: str, session) -> dict:
 
 
 def run_work_block():
-    n = 10
     start = time.time()
-    asyncio.run(do_works(n))
+    asyncio.run(do_works(e_blocksize))
     stop = time.time()
     dur = stop - start
-    dur1 = float(dur) / n
-    logging.info(f"took {dur:.2f} seconds for {n} calls")
+    dur1 = float(dur) / e_blocksize
+    logging.info(f"took {dur:.2f} seconds for {e_blocksize} calls")
     logging.info(f"took {dur1:.2f} seconds for 1 call")
 
 
-def main():
+def run_blocks():
     block_cnt = 1
     while True:
         run_work_block()
         logging.info(f"-- finished running work block {block_cnt} --------------------------------------")
         block_cnt += 1
-        time.sleep(10)
+
+
+def main(error_cnt: int):
+    try:
+        run_blocks()
+    except aiohttp.ClientConnectorError as e:
+        if error_cnt > 10:
+            raise e
+        else:
+            logging.info(f"Caught {type(e)}. Error count: {error_cnt}")
+            time.sleep(5)
+            main(error_cnt + 1)
 
 
 if __name__ == '__main__':
     logging.basicConfig(stream=sys.stdout, level=e_loglevel)
-    main()
+    main(0)
