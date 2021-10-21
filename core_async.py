@@ -16,8 +16,8 @@ async def do_work(cnt, session):
     print(f"sending {rs}")
     async with session.get(rs) as resp:
         reason = resp.reason
-        text = await resp.text()
-        print(f"result for {rs}: {reason} {text}")
+        r = await resp.json()
+        print(f"result for {rs}: {reason} {r}")
 
 
 def main():

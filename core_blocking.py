@@ -11,7 +11,7 @@ def do_work(cnt):
     rs = f"http://172.17.0.2:8080/{cnt}"
     print(f"sending {rs}")
     r = requests.get(rs)
-    print(f"result for {rs}: {r.reason} {r.text}")
+    print(f"result for {rs}: {r.reason} {r.json()}")
 
 
 def main():
