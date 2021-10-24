@@ -34,10 +34,11 @@ def run_work_block():
 
 
 def run_work_blocks():
+    block_cnt = 1
     while True:
         run_work_block()
-        logging.info("-- Finished work block ------------------------------------------")
-        time.sleep(10)
+        logging.info(f"-- finished running work block {block_cnt} --------------------------------------")
+        block_cnt += 1
 
 
 def main(error_cnt: int):

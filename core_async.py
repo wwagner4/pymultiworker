@@ -42,7 +42,7 @@ def run_work_block():
     logging.info(f"took {dur1:.2f} seconds for 1 call")
 
 
-def run_blocks():
+def run_work_blocks():
     block_cnt = 1
     while True:
         run_work_block()
@@ -52,7 +52,7 @@ def run_blocks():
 
 def main(error_cnt: int):
     try:
-        run_blocks()
+        run_work_blocks()
     except aiohttp.ClientConnectorError as e:
         if error_cnt > 10:
             raise e
