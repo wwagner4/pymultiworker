@@ -1,3 +1,5 @@
+# build
+docker build -t pymultiworker .
 
 # worker
 docker run --net host -e HOST=localhost --name worker -d pymultiworker python -m worker
@@ -8,6 +10,8 @@ docker run --net host -e HOST=localhost --name corea -d pymultiworker python -m 
 # core blocking
 docker run --net host -e HOST=localhost --name coreb -d pymultiworker python -m core_blocking
 
+# core blocking
+docker run --net host -e HOST=localhost --name coreb -d pymultiworker python -m core_threading
 
 ---------------------------------------------------------------------------
 

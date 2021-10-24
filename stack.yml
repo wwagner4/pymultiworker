@@ -10,7 +10,7 @@ services:
 
   core:
     image: pymultiworker
-    entrypoint: ["python", "-m", "core_async"]
+    entrypoint: ["python", "-m", "core_threading"]
     environment:
       - HOST=worker
       - BLOCKSIZE=15

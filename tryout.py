@@ -2,6 +2,7 @@ import asyncio
 import logging
 import random
 import sys
+from time import sleep
 
 
 def run_async():
@@ -32,9 +33,27 @@ def call_worker():
     logging.info(f"result for {rs}: {r.reason} {r1}")
 
 
+def run_concurrent():
+    from concurrent.futures import ThreadPoolExecutor
+
+    def square(n):
+        print(f"Started square({n})")
+        st = 0.5 + random.random() * 2
+        sleep(st)
+        print(f"Almost finished square({n})")
+        return n * n
+
+    values = range(20)
+    with ThreadPoolExecutor(max_workers=15) as executor:
+        results = executor.map(square, values)
+
+    print(list(results))
+
+
 def main():
     # run_async()
-    call_worker()
+    # call_worker()
+    run_concurrent()
 
 
 if __name__ == '__main__':
