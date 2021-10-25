@@ -9,30 +9,30 @@ from concurrent.futures import ThreadPoolExecutor
 e_host = os.getenv("HOST", "localhost")
 e_port = int(os.getenv("PORT", "5000"))
 e_loglevel = os.getenv("LOGLEVEL", "INFO")
+e_blocksize = int(os.getenv("BLOCKSIZE", "3"))
 
 
 def do_works(n: int):
-    ids = range(n)
-    with ThreadPoolExecutor(max_workers=5) as executor:
+    ids = map(lambda i: str(i), range(n))
+    with ThreadPoolExecutor(max_workers=e_blocksize) as executor:
         return executor.map(do_work, ids)
 
 
 # noinspection HttpUrlsUsage
-def do_work(cnt):
-    rs = f"http://{e_host}:{e_port}/{cnt}"
+def do_work(call_id: str):
+    rs = f"http://{e_host}:{e_port}/{call_id}"
     logging.info(f"sending {rs}")
     r = requests.get(rs)
     logging.info(f"result for {rs}: {r.reason} {r.json()}")
 
 
 def run_work_block():
-    n = 10
     start = time.time()
-    do_works(n)
+    do_works(e_blocksize)
     stop = time.time()
     dur = stop - start
-    dur1 = float(dur) / n
-    logging.info(f"took {dur:.2f} seconds for {n} calls")
+    dur1 = float(dur) / e_blocksize
+    logging.info(f"took {dur:.2f} seconds for {e_blocksize} calls")
     logging.info(f"took {dur1:.2f} seconds for 1 call")
 
 

@@ -16,9 +16,6 @@ async def do_works(n: int):
     async with aiohttp.ClientSession() as session:
         tasks = [asyncio.create_task(do_work(str(call_id), session)) for call_id in range(n)]
         rs = await asyncio.wait(tasks)
-        logging.info("finished all")
-        for i, r in enumerate(rs[0]):
-            logging.info(f"result {i} - {r.result()}")
 
 
 # noinspection HttpUrlsUsage
